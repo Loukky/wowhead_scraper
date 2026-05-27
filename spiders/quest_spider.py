@@ -18,6 +18,7 @@ class QuestSpider(scrapy.Spider):
     quest_data = []
     lang = ""
     version = ""
+    base_url_mop = "https://wowhead.com/mop/{}/quest={}/"
     base_url_retail = "https://wowhead.com/{}/quest={}/"
     base_url_wotlk = "https://wowhead.com/wotlk/{}/quest={}/"
     base_url_tbc = "https://wowhead.com/tbc/{}/quest={}/"
@@ -36,6 +37,8 @@ class QuestSpider(scrapy.Spider):
             base_url = self.base_url_wotlk
         if version == "tbc":
             base_url = self.base_url_tbc
+        if version == "mop":
+            base_url = self.base_url_mop
 
         if lang == "mx":
             base_url = "https://db.wowlatinoamerica.com/?quest={}"

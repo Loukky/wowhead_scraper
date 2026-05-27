@@ -97,7 +97,7 @@ if __name__ == '__main__':
     parser.add_argument("-t", "--target", help="The target you want to scrape."
                                                "Possible values are 'npc', 'quest', 'item', 'object' and 'xp'. Default: 'npc'", type=str)
     parser.add_argument("-v", "--version", help="The version of WoW Classic you want to scrape."
-                                                "Possible values are 'classic', 'tbc' and 'wotlk'. Default: 'wotlk'", type=str)
+                                                "Possible values are 'classic', 'tbc', 'wotlk', 'mop'. Default: 'wotlk'", type=str)
     args = parser.parse_args()
 
     if args.lang is None:

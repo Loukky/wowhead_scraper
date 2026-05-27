@@ -15,6 +15,7 @@ class ObjectSpider(scrapy.Spider):
     npc_names = []
     lang = ""
     version = ""
+    base_url_mop = "https://wowhead.com/mop/{}/object={}/"
     base_url_retail = "https://wowhead.com/{}/object={}/"
     base_url_wotlk = "https://wowhead.com/wotlk/{}/object={}/"
     base_url_tbc = "https://wowhead.com/tbc/{}/object={}/"
@@ -32,6 +33,8 @@ class ObjectSpider(scrapy.Spider):
             base_url = self.base_url_wotlk
         if version == "tbc":
             base_url = self.base_url_tbc
+        if version == "mop":
+            base_url = self.base_url_mop
 
         if lang == "mx":
             base_url = "https://db.wowlatinoamerica.com/?object={}"
