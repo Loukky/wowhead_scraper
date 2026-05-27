@@ -14,12 +14,16 @@ class Runner:
     lang: str = ""
     target: str = ""
     version: str = ""
+    concurrent: int = 3
+    delay: float = 2.0
     target_dir: Path = None
 
-    def __init__(self, lang: str, target: str, version: str) -> None:
+    def __init__(self, lang: str, target: str, version: str, concurrent: int = 3, delay: float = 2.0) -> None:
         self.lang = lang
         self.target = target
         self.version = version
+        self.concurrent = concurrent
+        self.delay = delay
         self.logger = getLogger(__name__)
         self.target_dir = OUTPUT_DIR / target
         if not self.target_dir.exists():
@@ -36,9 +40,9 @@ class Runner:
 
         process = CrawlerProcess(settings={
             "LOG_LEVEL": "INFO",
-            "CONCURRENT_REQUESTS": 3,
-            "CONCURRENT_REQUESTS_PER_DOMAIN": 3,
-            "DOWNLOAD_DELAY": 2,
+            "CONCURRENT_REQUESTS": self.concurrent,
+            "CONCURRENT_REQUESTS_PER_DOMAIN": self.concurrent,
+            "DOWNLOAD_DELAY": self.delay,
             "RANDOMIZE_DOWNLOAD_DELAY": True,
             "AUTOTHROTTLE_ENABLED": False,
             "RETRY_ENABLED": True,
@@ -97,6 +101,8 @@ if __name__ == '__main__':
                                                "Possible values are 'npc', 'quest', 'item', 'object' and 'xp'. Default: 'npc'", type=str)
     parser.add_argument("-v", "--version", help="The version of WoW Classic you want to scrape."
                                                 "Possible values are 'classic', 'tbc', 'wotlk', 'mop'. Default: 'wotlk'", type=str)
+    parser.add_argument("-c", "--concurrent", help="Number of concurrent requests. Default: 3", type=int, default=3)
+    parser.add_argument("-d", "--delay", help="Download delay in seconds. Default: 2.0", type=float, default=2.0)
     args = parser.parse_args()
 
     if args.lang is None:
@@ -106,5 +112,5 @@ if __name__ == '__main__':
     if args.version is None:
         args.version = 'wotlk'
 
-    runner = Runner(args.lang, args.target, args.version)
+    runner = Runner(args.lang, args.target, args.version, args.concurrent, args.delay)
     runner.run()
