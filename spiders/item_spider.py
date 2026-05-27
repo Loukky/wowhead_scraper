@@ -89,6 +89,9 @@ class ItemSpider(scrapy.Spider):
     def __parse_name(self, response) -> str:
         name = response.xpath(self.xpath_name).get()
 
+        if not name:
+            return ""
+
         if name.startswith("[Deprecated for 4.x]"):
             name = name[20:]
         elif name.startswith("[UNUSED]"):
