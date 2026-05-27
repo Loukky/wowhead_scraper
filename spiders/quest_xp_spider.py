@@ -49,6 +49,8 @@ class QuestXpSpider(scrapy.Spider):
     @classmethod
     def __parse_xp(self, response):
         script: str = response.xpath("//script[contains(., 'g_quest')]/text()").extract_first()
+        if not script:
+            return None
         junks = script.split('\n')
         qid: int = response.url.split("/")[-2][6:]
         json_line: str = ""

@@ -94,6 +94,9 @@ class QuestSpider(scrapy.Spider):
     def __parse_title(self, response) -> str:
         title: str = response.xpath(self.xpath_title).get()
 
+        if not title:
+            return ""
+
         title = self.__filter_title(title)
         return title
 
