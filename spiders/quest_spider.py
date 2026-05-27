@@ -25,7 +25,6 @@ class QuestSpider(scrapy.Spider):
     base_url_classic = "https://wowhead.com/classic/{}/quest={}/"
 
     xpath_title = "//div[@class='text']/h1[@class='heading-size-1']/text()"
-    xpath_objective_and_description = "//div[@class='block-block-bg is-btf']//following-sibling::text()"
 
     def __init__(self, lang, version, **kwargs):
         super().__init__(**kwargs)
@@ -159,15 +158,37 @@ class QuestSpider(scrapy.Spider):
         return None
 
     def __parse_objective_and_description(self, response):
-        text_snippets = response.xpath(self.xpath_objective_and_description).extract()
-        data_list = self.__filter_text_snippets(text_snippets)
-        if len(data_list) < 2:
-            self.logger.warning("Wrong structured HTML for {}".format(response.url))
-            objective = ""
-            description = ""
+        html = response.text
+        # Find the div.text content block
+        text_block_match = re.search(r'<div class="text">(.*?)</div>\s*</div>\s*</div>\s*</div>', html, re.DOTALL)
+        if not text_block_match:
+            self.logger.warning("Could not find div.text for {}".format(response.url))
+            return "", ""
+
+        text_block = text_block_match.group(1)
+
+        # Objective: all text between </h1> and the first <h2> or <table class="icon-list">
+        obj_match = re.search(r'</h1>(.*?)(?:<table class="icon-list"|<h2)', text_block, re.DOTALL)
+        if obj_match:
+            objective = re.sub(r'<[^>]+>', '', obj_match.group(1)).strip()
         else:
-            objective = data_list[0]
-            description = data_list[1]
+            objective = ""
+
+        # Description: text between <h2>描述/Description</h2> and the next <h2>
+        desc_match = re.search(r'<h2[^>]*>(?:描述|Description)</h2>(.*?)(?:<h2|$)', text_block, re.DOTALL)
+        if desc_match:
+            description = desc_match.group(1).strip()
+            # Clean HTML tags and normalize whitespace
+            description = re.sub(r'<br\s*/?>', '\n', description)
+            description = re.sub(r'<[^>]+>', '', description)
+            description = re.sub(r'\n\s*\n', '\n', description)
+            description = description.strip()
+        else:
+            description = ""
+
+        if objective == "" or description == "":
+            self.logger.warning("Wrong structured HTML for {}".format(response.url))
+
         return description, objective
 
     def __filter_text_snippets(self, text_snippets):
