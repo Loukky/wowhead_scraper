@@ -122,12 +122,14 @@ class QuestSpider(scrapy.Spider):
             return m.group(1).replace(",", "")
 
         # Pattern 2: g_quests JSON data embedded in script tag
+        # Format: $.extend(g_quests[1], {"id":1, ..."xp":33100});
         script = response.xpath("//script[contains(., 'g_quests[')]/text()").get()
         if script:
-            m = re.search(r'g_quests\[\d+\],\s*(.*?);', script, re.DOTALL)
-            if m:
+            start = script.find('{', script.find('g_quests['))
+            end = script.find('});', start) + 1
+            if start >= 0 and end > start:
                 try:
-                    data = json.loads(m.group(1))
+                    data = json.loads(script[start:end])
                     return data.get("xp")
                 except json.JSONDecodeError:
                     self.logger.warning("Failed to parse quest JSON for %s", response.url)
