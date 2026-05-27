@@ -232,8 +232,11 @@ class QuestSpider(scrapy.Spider):
     def spider_closed(self, spider):
         self.logger.info("Spider closed.")
 
-        f = Formatter()
-        f(self.lang, "quest")
+        try:
+            f = Formatter()
+            f(self.lang, "quest")
+        except Exception as e:
+            self.logger.warning("Formatter failed (non-critical): %s", e)
 
         # m = Merger(self.lang, "Quests")
         # m()

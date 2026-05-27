@@ -82,10 +82,12 @@ class ObjectSpider(scrapy.Spider):
     def spider_closed(self, spider) -> None:
         self.logger.info("Spider closed. Starting formatter")
 
-        f = Formatter()
-        f(self.lang, "object")
-
-        self.logger.info("Formatting done!")
+        try:
+            f = Formatter()
+            f(self.lang, "object")
+            self.logger.info("Formatting done!")
+        except Exception as e:
+            self.logger.warning("Formatter failed (non-critical): %s", e)
 
     def __parse_name(self, response) -> str:
         name = response.xpath(self.xpath_name).get()

@@ -36,8 +36,6 @@ class Runner:
 
         process = CrawlerProcess(settings={
             "LOG_LEVEL": "INFO",
-            "FEED_EXPORT_ENCODING": "utf-8",
-            "FEED_FORMAT": "json",
             "CONCURRENT_REQUESTS": 3,
             "CONCURRENT_REQUESTS_PER_DOMAIN": 3,
             "DOWNLOAD_DELAY": 2,
@@ -63,6 +61,9 @@ class Runner:
             },
             "COOKIES_ENABLED": True,
             "FEED_URI": str(feed_uri),
+            "ITEM_PIPELINES": {
+                "pipelines.IncrementalJsonPipeline": 1,
+            },
         })
 
         # Proxy support: set WOWHEAD_PROXY env var to route through a proxy

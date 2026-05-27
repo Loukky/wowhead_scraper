@@ -68,7 +68,9 @@ class QuestXpSpider(scrapy.Spider):
     def spider_closed(self, spider):
         self.logger.info("Spider closed. Starting formatter...")
 
-        f = Formatter()
-        f(self.lang, "xp")
-
-        self.logger.info("Formatting done!")
+        try:
+            f = Formatter()
+            f(self.lang, "xp")
+            self.logger.info("Formatting done!")
+        except Exception as e:
+            self.logger.warning("Formatter failed (non-critical): %s", e)
