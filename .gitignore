@@ -1,6 +1,4 @@
-**/*.html
-**/*.json
+.venv/
+__pycache__/
+*.pyc
 output/
-.idea/
-venv/
-**/__pycache__
