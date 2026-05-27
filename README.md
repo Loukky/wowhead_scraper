@@ -22,4 +22,19 @@ The available parameters are:
 |-------------------|-------|--------------------------------------|------------------------------------------------|---------|
 | `-l`, `--lang`    | `str` | The language you want to scrape.     | `en`, `de`, `fr`, `es`, `ru`, `cn`, `pt`, `ko` | `en`    |
 | `-t`, `--target`  | `str` | The target you want to scrape.       | `npc`, `quest`, `item`, `object`, `xp`         | `npc`   |
-| `-v`, `--version` | `str` | The game version you want to scrape. | `classic`, `tbc`, `wotlk`                      | `wotlk` |
+| `-v`, `--version` | `str` | The game version you want to scrape. | `classic`, `tbc`, `wotlk`, `mop`               | `wotlk` |
+| `-c`, `--concurrent` | `int` | Number of concurrent requests.     | Any positive integer                            | `3`     |
+| `-d`, `--delay`   | `float` | Download delay between requests.  | Any positive number (seconds)                   | `2.0`   |
+
+### Usage examples
+
+```bash
+# Scrape all WotLK objects in Chinese (3 concurrent, 2s delay):
+python runner.py -t object -v wotlk -l cn
+
+# Slow scraping for rate-limited connections (1 concurrent, 10s delay):
+python runner.py -t quest -v mop -l cn -c 1 -d 10
+
+# Fast scraping (5 concurrent, 1s delay):
+python runner.py -t item -v wotlk -l en -c 5 -d 1
+```
