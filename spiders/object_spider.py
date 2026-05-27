@@ -21,7 +21,7 @@ class ObjectSpider(scrapy.Spider):
     base_url_tbc = "https://wowhead.com/tbc/{}/object={}/"
     base_url_classic = "https://wowhead.com/classic/{}/object={}/"
 
-    xpath_name = "//h1[@class='heading-size-1']//text()"
+    xpath_name = "//h1[contains(@class,'heading-size-1') or contains(@class,'wh-heading-responsive')]//text()"
 
     def __init__(self, lang, version, **kwargs) -> None:
         super().__init__(**kwargs)
