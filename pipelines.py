@@ -1,15 +1,17 @@
-"""实时写入 Items 到 JSON 文件，不需要等 spider 关闭"""
+"""实时写入 Items 到 JSON 文件，线程安全"""
 import json
 import os
+import threading
 from pathlib import Path
 
 
 class IncrementalJsonPipeline:
-    """每个 item 抓取后立即追加写入 JSON 文件"""
+    """每个 item 抓取后立即追加写入 JSON 文件（线程安全）"""
 
     def __init__(self):
         self.file = None
         self.first_item = True
+        self.lock = threading.Lock()
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -26,17 +28,19 @@ class IncrementalJsonPipeline:
 
     def process_item(self, item, spider):
         if self.file:
-            line = json.dumps(item, ensure_ascii=False, indent=2)
-            if self.first_item:
-                self.file.write(line)
-                self.first_item = False
-            else:
-                self.file.write(",\n" + line)
-            self.file.flush()
-            os.fsync(self.file.fileno())  # 立即刷到磁盘
+            with self.lock:
+                line = json.dumps(item, ensure_ascii=False, indent=2)
+                if self.first_item:
+                    self.file.write(line)
+                    self.first_item = False
+                else:
+                    self.file.write(",\n" + line)
+                self.file.flush()
+                os.fsync(self.file.fileno())  # 立即刷到磁盘
         return item
 
     def close_spider(self, spider):
         if self.file:
-            self.file.write("\n]")
-            self.file.close()
+            with self.lock:
+                self.file.write("\n]")
+                self.file.close()
