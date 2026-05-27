@@ -50,6 +50,8 @@ class Runner:
             "RETRY_ENABLED": True,
             "RETRY_HTTP_CODES": [429, 500, 502, 503, 504],
             "RETRY_TIMES": 5,
+            "REDIRECT_ENABLED": False,
+            "HTTPERROR_ALLOWED_CODES": [403],
             "USER_AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "DEFAULT_REQUEST_HEADERS": {
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",

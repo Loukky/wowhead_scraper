@@ -110,29 +110,25 @@ class QuestSpider(scrapy.Spider):
             title = title[:-2]
         return title.strip()
 
-    def __parse_experience(self, response) -> int:
-        body = str(response.body)
-        #Archive
-        rest = re.search("(\d+,\d+,\d+,\d+|\d+,\d+,\d+|\d+,\d+|\d+) experience", body)
-        if(rest is not None):
-            #print(rest.group(1))
-            experience = rest.group(1)
-            return str(experience).replace(",", "")
-        #else:
-        #    print("Something wong?")
+    def __parse_experience(self, response):
+        body = response.text
 
-        #WoWhead
-        rest = re.search("g_quests\[\d+\], {(.*?)}", body)
-        if(rest is not None):
-            dataString = "{"+str(rest.group(1))+"}"
-            dataString = dataString.replace("\\", "")
-            questJsonData = json.loads(dataString)
-            #print(rest.group(1))
-            if "xp" in questJsonData:
-                experience = questJsonData["xp"]
-                return experience
-            else:
-                return None
+        # Pattern 1: "X experience" text (archive data)
+        m = re.search(r"(\d+(?:,\d+)*) experience", body)
+        if m:
+            return m.group(1).replace(",", "")
+
+        # Pattern 2: g_quests JSON data embedded in script tag
+        script = response.xpath("//script[contains(., 'g_quests[')]/text()").get()
+        if script:
+            m = re.search(r'g_quests\[\d+\],\s*(.*?);', script, re.DOTALL)
+            if m:
+                try:
+                    data = json.loads(m.group(1))
+                    return data.get("xp")
+                except json.JSONDecodeError:
+                    self.logger.warning("Failed to parse quest JSON for %s", response.url)
+
         return None
 
     def __parse_required_level(self, response) -> int:
