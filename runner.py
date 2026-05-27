@@ -60,10 +60,9 @@ class Runner:
                 "Sec-Ch-Ua-Platform": '"Windows"',
             },
             "COOKIES_ENABLED": True,
-            "INCREMENTAL_OUTPUT_PATH": str(feed_uri),
-            "ITEM_PIPELINES": {
-                "pipelines.IncrementalJsonPipeline": 1,
-            },
+            "FEED_URI": str(feed_uri),
+            "FEED_FORMAT": "json",
+            "FEED_EXPORT_INDENT": None,
         })
 
         # Proxy support: set WOWHEAD_PROXY env var to route through a proxy
