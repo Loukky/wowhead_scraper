@@ -60,7 +60,7 @@ class Runner:
                 "Sec-Ch-Ua-Platform": '"Windows"',
             },
             "COOKIES_ENABLED": True,
-            "FEED_URI": str(feed_uri),
+            "INCREMENTAL_OUTPUT_PATH": str(feed_uri),
             "ITEM_PIPELINES": {
                 "pipelines.IncrementalJsonPipeline": 1,
             },

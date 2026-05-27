@@ -16,7 +16,7 @@ class IncrementalJsonPipeline:
     @classmethod
     def from_crawler(cls, crawler):
         pipeline = cls()
-        feed_uri = crawler.settings.get("FEED_URI")
+        feed_uri = crawler.settings.get("INCREMENTAL_OUTPUT_PATH")
         if feed_uri:
             path = Path(feed_uri)
             path.parent.mkdir(parents=True, exist_ok=True)
