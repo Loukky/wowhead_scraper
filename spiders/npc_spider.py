@@ -14,7 +14,7 @@ class NPCSpider(scrapy.Spider):
     npc_names = []
     lang = ""
     version = ""
-    base_url_mop = "https://wowhead.com/mop/{}/npc={}/"
+    base_url_mop = "https://www.wowhead.com/mop-classic/{}/npc={}/"
     base_url_retail = "https://wowhead.com/{}/npc={}/"
     base_url_wotlk = "https://wowhead.com/wotlk/{}/npc={}/"
     base_url_tbc = "https://wowhead.com/tbc/{}/npc={}/"

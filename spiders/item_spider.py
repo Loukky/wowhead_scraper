@@ -15,7 +15,7 @@ class ItemSpider(scrapy.Spider):
     npc_names = []
     lang = ""
     version = ""
-    base_url_mop = "https://wowhead.com/mop/{}/item={}/"
+    base_url_mop = "https://www.wowhead.com/mop-classic/{}/item={}/"
     base_url_retail = "https://wowhead.com/{}/item={}/"
     base_url_wotlk = "https://wowhead.com/wotlk/{}/item={}/"
     base_url_tbc = "https://wowhead.com/tbc/{}/item={}/"

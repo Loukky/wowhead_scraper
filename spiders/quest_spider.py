@@ -18,7 +18,7 @@ class QuestSpider(scrapy.Spider):
     quest_data = []
     lang = ""
     version = ""
-    base_url_mop = "https://wowhead.com/mop/{}/quest={}/"
+    base_url_mop = "https://www.wowhead.com/mop-classic/{}/quest={}/"
     base_url_retail = "https://wowhead.com/{}/quest={}/"
     base_url_wotlk = "https://wowhead.com/wotlk/{}/quest={}/"
     base_url_tbc = "https://wowhead.com/tbc/{}/quest={}/"

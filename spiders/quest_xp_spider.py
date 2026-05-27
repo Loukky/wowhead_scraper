@@ -12,7 +12,7 @@ class QuestXpSpider(scrapy.Spider):
     start_urls = []
     quest_data = []
     lang = ""
-    base_url_mop = "https://wowhead.com/mop/quest={}/"
+    base_url_mop = "https://www.wowhead.com/mop-classic/quest={}/"
     base_url = "https://{}.{}.wowhead.com/quest={}/"
 
     def __init__(self, lang, version, **kwargs):
